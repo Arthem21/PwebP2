@@ -1,0 +1,57 @@
+﻿@page "/persona/nueva"
+@rendermode InteractiveServer
+@inject NavigationManager nav
+@inject Contexto ctx
+
+
+<PageTitle>Nueva Persona</PageTitle>
+<h1>Nuevo Registro</h1>
+
+<!--Formulario del programa (Cristobal Garcia Lopez 2023-1634) -->
+
+<EditForm Model="@persona" OnValidSubmit="guardar">
+    <DataAnnotationsValidator/>	
+    <ValidationSummary/>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label for="Nombre" class="form-label">Nombre</label>
+            <InputText id= "Nombre" class="form-control" @bind-Value="@persona.Nombre"/>
+        </div>
+        <div class="col">
+            <label for="Apellido" class="form-label">Apellido</label>
+            <InputText id= "Apellido" class="form-control" @bind-Value="@persona.Apellido"/>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <label for="Telefono" class="form-label">Telefono</label>
+            <InputText id= "Telefono" class="form-control" @bind-Value="@persona.Telefono"/>
+        </div>
+        <div class="col">
+            <label for="Correo" class="form-label">Correo</label>
+            <InputText id= "Correo" class="form-control" @bind-Value="@persona.Correo"/>
+        </div>
+    </div>
+
+    <!--Boton para Crear un nuevo registro (Cristobal Garcia Lopez 2023-1634) -->
+    <div class="text-center mb-3">
+        <button type="submit" class="btn btn-success btn-lg">Añadir registros</button>
+    </div>
+</EditForm>
+
+
+@code {
+    
+    public Personas persona{set;get;}= new Personas();
+    
+    //Metodo de guardado (Cristobal Garcia Lopez 2023-1634)
+
+    protected async Task guardar(){
+         
+         ctx.personas.AddAsync(persona);
+         await ctx.SaveChangesAsync();
+         StateHasChanged();
+         nav.NavigateTo("/persona");
+    }
+}

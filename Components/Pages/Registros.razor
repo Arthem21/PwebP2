@@ -1,0 +1,61 @@
+﻿@page "/"
+@page "/persona"
+@using Microsoft.EntityFrameworkCore
+@inject NavigationManager nav
+@inject Contexto ctx
+@rendermode InteractiveServer
+
+<h1>Lista de registros</h1>
+<!--Boton para agregar nuevos registros(Cristobal Garcia Lopez 2023-1634) -->
+<div class="text-center mb-3">
+        <button type="button" class="btn btn-success btn-lg" @onclick="nuevo">Nuevo registro</button>
+    </div>
+
+    <!--Tabla de registros (Cristobal Garcia Lopez 2023-1634) -->
+    <table class="table table-tripped table-bordered">
+        <thead>
+            <tr>
+                <!--Columnas de la tabla (Cristobal Garcia Lopez 2023-1634) -->
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <!--Filas de la tabla (Cristobal Garcia Lopez 2023-1634) -->
+            @foreach(var x in personas){
+                <tr>
+                    <td>@x.id</td>
+                    <td>@x.Nombre</td>
+                    <td>@x.Apellido</td>
+                    <td>@x.Telefono</td>
+                    <td>@x.Correo</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+@code{
+
+    public List<Personas> personas{get; set;}= new List<Personas>();
+    
+    //Metodo para ir al formulario (Cristobal Garcia Lopez 2023-1634)
+    public void nuevo(){
+        nav.NavigateTo("/persona/nueva");
+    }    
+
+    //Metodo para cargar la tabla (Cristobal Garcia Lopez 2023-1634)
+    protected override async Task OnAfterRenderAsync (bool render){
+
+        if(render){
+            personas= await ctx.personas.ToListAsync();
+            await ctx.SaveChangesAsync();
+            
+        }
+        StateHasChanged();
+    }
+}    
